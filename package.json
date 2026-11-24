@@ -1,0 +1,9 @@
+{
+  "name": "vicelens",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Filtro de cámara con minimapa que responde a los pasos.",
+  "scripts": { "start": "node servidor.mjs" },
+  "engines": { "node": ">=18" }
+}

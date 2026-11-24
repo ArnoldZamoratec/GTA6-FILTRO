@@ -1,0 +1,12 @@
+{
+  "name": "ViceLens",
+  "short_name": "ViceLens",
+  "lang": "es",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["fullscreen", "standalone"],
+  "background_color": "#101013",
+  "theme_color": "#101013",
+  "icons": [{"src":"assets/mark.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]
+}

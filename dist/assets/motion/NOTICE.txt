@@ -1,0 +1,5 @@
+TensorFlow.js and its WebAssembly backend, version 4.22.0. Copyright The TensorFlow Authors.
+MoveNet.SinglePose.Lightning v4 by Google. Distributed under the Apache License, Version 2.0 (LICENSE.txt).
+Runtime: https://www.npmjs.com/package/@tensorflow/tfjs/v/4.22.0
+Backend: https://www.npmjs.com/package/@tensorflow/tfjs-backend-wasm/v/4.22.0
+Model: https://www.kaggle.com/models/google/movenet/tfJs/singlepose-lightning/4

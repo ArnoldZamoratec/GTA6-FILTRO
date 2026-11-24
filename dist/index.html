@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101013">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="description" content="Graba a una persona en pantalla completa con un minimapa que sigue sus pasos.">
+  <title>ViceLens · Estudio de cámara</title>
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/ocean-drive.webp" as="image">
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" class="symbols" aria-hidden="true">
+ <symbol id="i-studio" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 5v14m10-14v14M3 9h4m-4 6h4m10-6h4m-4 6h4"/></symbol>
+ <symbol id="i-gallery" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9" r="1.3"/><path d="m4 17 4.5-4.5 3 2.8 3.7-4.4L21 17"/></symbol>
+ <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 0 1 4.9.4c0 2-2.6 2.1-2.6 4M12 16.5h.01"/></symbol>
+ <symbol id="i-video" viewBox="0 0 24 24"><rect x="2.8" y="6" width="12.9" height="12" rx="2.8"/><path d="m16 10 5-3v10l-5-3z"/></symbol>
+ <symbol id="i-photo" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h2.5L9 3.9h6L16.6 6H19a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="12.5" r="3.5"/></symbol>
+ <symbol id="i-flip" viewBox="0 0 24 24"><path d="M3.1 9A8.8 8.8 0 0 1 18 5.7L20.7 8M21 3.7V8h-4.3M20.9 15A8.8 8.8 0 0 1 6 18.3L3.3 16M3 20.3V16h4.3"/></symbol>
+ <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+ <symbol id="i-shrink" viewBox="0 0 24 24"><path d="M3 8h5V3m13 5h-5V3M8 21v-5H3m13 5v-5h5"/></symbol>
+ <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10.5v1a7 7 0 0 0 14 0v-1M12 19v3m-4 0h8"/></symbol>
+ <symbol id="i-mute" viewBox="0 0 24 24"><path d="M9 9v2.5a3 3 0 0 0 5.7 1.3M9.5 5A3 3 0 0 1 15 6v2m4 2.5v1c0 .8-.2 1.6-.4 2.2M5 10.5v1a7 7 0 0 0 11.6 5.4M12 19v3m-4 0h8M2.7 2.7l18.5 18.5"/></symbol>
+ <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3 7h4m6 0h8M3 17h10m6 0h2"/><circle cx="10" cy="7" r="3"/><circle cx="16" cy="17" r="3"/></symbol>
+ <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 5 6-2 6 2.4 6-2v15.8l-6 2-6-2.4-6 2zM9 3v15.8M15 5.4v15.8"/></symbol>
+ <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.5 5.6a5 5 0 0 0-7.2 0L12 7l-1.3-1.4a5 5 0 0 0-7.2 7L12 21l8.5-8.4a5 5 0 0 0 0-7z"/></symbol>
+ <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.8 2.8 5.8 6.4.9-4.6 4.5 1.1 6.4-5.7-3-5.7 3 1.1-6.4-4.6-4.5 6.4-.9z"/></symbol>
+ <symbol id="i-pin" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="9.8" r="2.2"/></symbol>
+ <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="2.3"/><path d="M12 2v2.5M22 12h-2.5M12 22v-2.5M2 12h2.5"/></symbol>
+ <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.8 12.3 4.8 4.8 9.7-10"/></symbol>
+ <symbol id="i-reset" viewBox="0 0 24 24"><path d="M3.4 10a8.6 8.6 0 1 1 2.3 8.3M3 4.5V10h5.5"/></symbol>
+ <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+ <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></symbol>
+ <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3m-4.5 4.5L12 3l4.5 4.5M7 10H5v11h14V10h-2"/></symbol>
+ <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 6h16m-12 0 1-3h6l1 3M6 6l1 15h10l1-15M10 10v7m4-7v7"/></symbol>
+ <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11.4v5m0-9.1h.01"/></symbol>
+ <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.1 12S6 5.3 12 5.3s9.9 6.7 9.9 6.7-3.9 6.7-9.9 6.7-9.9-6.7-9.9-6.7Z"/><circle cx="12" cy="12" r="2.7"/></symbol>
+ <symbol id="i-frame" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/><circle cx="12" cy="10" r="2.3"/><path d="M7.8 16a4.5 4.5 0 0 1 8.4 0"/></symbol>
+ <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8Z"/></symbol>
+ <symbol id="i-power" viewBox="0 0 24 24"><path d="M12 2v9m-5.1-6a8.3 8.3 0 1 0 10.2 0"/></symbol>
+</svg>
+
+<header class="topbar">
+ <div class="top-inner">
+  <a class="brand" href="#estudio" aria-label="ViceLens, estudio"><img src="assets/mark.svg" width="42" height="42" alt=""><span>VICE<b>LENS</b></span></a>
+  <nav aria-label="Secciones">
+   <a class="nav-link active" id="navStudio" href="#estudio" aria-current="page"><svg class="ico"><use href="#i-studio"/></svg><span>Estudio</span></a>
+   <a class="nav-link" id="navGallery" href="#galeria"><svg class="ico"><use href="#i-gallery"/></svg><span>Galería</span><span id="galleryCount" hidden>0</span></a>
+  </nav>
+  <button class="guide-button" id="guideOpen" type="button" aria-label="Guía rápida"><svg class="ico"><use href="#i-help"/></svg><span>Guía rápida</span></button>
+ </div>
+</header>
+
+<main class="shell">
+ <section id="studioPage" aria-labelledby="studioTitle">
+  <div class="heading-row">
+   <div><h1 id="studioTitle">Estudio de cámara</h1><p class="intro">La persona que grabas es el personaje de tu escena al estilo de GTA VI.</p></div>
+   <button class="primary" id="cameraPower" type="button"><svg class="ico"><use href="#i-video"/></svg><span>Activar cámara</span></button>
+  </div>
+  <div class="notice" id="notice" hidden role="status"><svg class="ico"><use href="#i-info"/></svg><span id="noticeText"></span><a id="directLink" target="_blank" rel="noopener" hidden>Abrir el filtro</a><button id="noticeClose" type="button" aria-label="Cerrar aviso"><svg class="ico"><use href="#i-close"/></svg></button></div>
+  <div class="workspace">
+   <div class="left-col">
+    <section id="cameraDeck" class="deck" aria-label="Visor y captura">
+     <div class="view" id="view">
+      <video id="sourceVideo" autoplay muted playsinline aria-hidden="true"></video>
+      <canvas id="screen" width="1280" height="720" aria-label="Escena con el filtro y los indicadores de juego"></canvas>
+      <div class="view-badge" id="viewBadge"><span class="status-dot"></span><span id="feedState">Vista previa</span></div>
+      <button id="expand" class="on-image-button" type="button" title="Pantalla completa" aria-label="Pantalla completa"><svg class="ico"><use href="#i-expand"/></svg></button>
+      <button type="button" id="mapZoom" class="map-zoom" aria-label="Cambiar zoom del minimapa" title="Cambiar zoom del minimapa"></button>
+      <div class="walk-hint" id="walkHint" role="status" hidden></div>
+      <div id="flash" aria-hidden="true"></div>
+     </div>
+     <div class="transport">
+      <div class="segmented" role="group" aria-label="Tipo de captura">
+       <button type="button" data-mode="video" aria-pressed="true"><svg class="ico"><use href="#i-video"/></svg>Video</button>
+       <button type="button" data-mode="photo" aria-pressed="false"><svg class="ico"><use href="#i-photo"/></svg>Foto</button>
+      </div>
+      <button id="shutter" class="shutter" type="button"><span class="shutter-icon" aria-hidden="true"></span><span id="shutterText">Grabar</span></button>
+      <div class="quick-tools">
+       <button id="mic" type="button" class="tool" aria-label="Activar micrófono" aria-pressed="false" title="Activar micrófono"><svg class="ico"><use href="#i-mute"/></svg></button>
+       <button id="flip" type="button" class="tool" aria-label="Cambiar cámara" title="Cambiar cámara"><svg class="ico"><use href="#i-flip"/></svg></button>
+      </div>
+     </div>
+    </section>
+    <div class="shot-tip"><span class="tip-icon"><svg class="ico"><use href="#i-frame"/></svg></span><div><h2>Encuadra el cuerpo completo</h2><p>Mantén las piernas y los pies dentro del encuadre para que el mapa acompañe sus pasos.</p></div></div>
+   </div>
+   <aside class="settings" aria-labelledby="settingsTitle">
+    <div class="settings-head"><svg class="ico"><use href="#i-sliders"/></svg><h2 id="settingsTitle">Ajustes del filtro</h2></div>
+    <div class="panel-body">
+     <fieldset class="looks"><legend>Estilo visual</legend><div class="look-grid">
+      <button class="look active" type="button" data-look="sunset" aria-pressed="true"><span class="look-img sunset"><span class="mark-check"><svg class="ico"><use href="#i-check"/></svg></span></span><span>Atardecer</span></button>
+      <button class="look" type="button" data-look="neon" aria-pressed="false"><span class="look-img neon"><span class="mark-check"><svg class="ico"><use href="#i-check"/></svg></span></span><span>Neón</span></button>
+      <button class="look" type="button" data-look="noir" aria-pressed="false"><span class="look-img noir"><span class="mark-check"><svg class="ico"><use href="#i-check"/></svg></span></span><span>Noir</span></button>
+      <button class="look" type="button" data-look="natural" aria-pressed="false"><span class="look-img natural"><span class="mark-check"><svg class="ico"><use href="#i-check"/></svg></span></span><span>Natural</span></button>
+     </div></fieldset>
+     <div class="intensity"><div class="section-line"><label for="strength">Intensidad</label><output for="strength" id="strengthValue">70 %</output></div><input type="range" id="strength" min="0" max="100" value="70"></div>
+     <div class="divider"></div>
+     <h3>Interfaz de juego</h3>
+     <div class="toggle-list">
+      <label class="toggle-row"><svg class="ico"><use href="#i-map"/></svg><span>Minimapa</span><input id="showMap" type="checkbox" role="switch" checked><i></i></label>
+      <label class="toggle-row"><svg class="ico"><use href="#i-heart"/></svg><span>Barras de estado</span><input id="showVitals" type="checkbox" role="switch" checked><i></i></label>
+      <label class="toggle-row"><svg class="ico"><use href="#i-star"/></svg><span>Estrellas de búsqueda</span><input id="showStars" type="checkbox" role="switch" checked><i></i></label>
+      <label class="toggle-row"><svg class="ico"><use href="#i-target"/></svg><span>Dinero y zona</span><input id="showMoney" type="checkbox" role="switch" checked><i></i></label>
+     </div>
+     <div class="divider map-divider"></div>
+     <div class="map-source"><span class="source-icon"><svg class="ico"><use href="#i-pin"/></svg></span><div><h3>Ubicación del mapa</h3><p id="mapState" aria-live="polite">Recorrido virtual con tus pasos</p></div><button class="mini-button" id="gps" type="button" aria-pressed="false">Usar GPS</button></div>
+     <a class="attribution" id="attribution" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" hidden>© OpenStreetMap contributors</a>
+    </div>
+    <button class="reset" id="reset" type="button"><svg class="ico"><use href="#i-reset"/></svg>Restablecer ajustes</button>
+   </aside>
+  </div>
+ </section>
+
+ <section id="galleryPage" hidden aria-labelledby="galleryTitle">
+  <div class="heading-row"><div><h1 id="galleryTitle">Galería</h1><p class="intro">Fotos y videos que has capturado en este navegador.</p></div></div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+  <div class="empty" id="emptyGallery"><span class="empty-icon"><svg class="ico"><use href="#i-gallery"/></svg></span><h2>Tu primera toma va aquí</h2><p>Activa la cámara en el estudio para grabar un video o tomar una foto.</p><a class="primary" href="#estudio">Ir al estudio</a></div>
+ </section>
+</main>
+
+<dialog id="guide" aria-labelledby="guideTitle">
+ <div class="dialog-head"><h2 id="guideTitle">Guía rápida</h2><button class="tool" data-close="guide" type="button" aria-label="Cerrar guía"><svg class="ico"><use href="#i-close"/></svg></button></div>
+ <div class="guide-steps">
+  <div><svg class="ico"><use href="#i-video"/></svg><section><h3>Activa la cámara</h3><p>Permite el acceso y apunta hacia quien será el personaje. El visor muestra a esa persona y su entorno en directo.</p></section></div>
+  <div><svg class="ico"><use href="#i-frame"/></svg><section><h3>Encuadra desde atrás</h3><p>La cámara se abre a pantalla completa. Encuadra las piernas de quien camina, incluso si grabas desde un punto fijo. El botón de las esquinas te devuelve a los ajustes.</p></section></div>
+  <div><svg class="ico"><use href="#i-map"/></svg><section><h3>Elige el minimapa</h3><p>El recorrido virtual avanza al caminar la persona que enfocas. Toca el minimapa para cambiar el zoom. Con «Usar GPS» verás el recorrido real del celular y las calles de OpenStreetMap.</p></section></div>
+  <div><svg class="ico"><use href="#i-photo"/></svg><section><h3>Guarda la toma</h3><p>Selecciona Video o Foto y pulsa el obturador. En pantalla completa: doble toque para entrar o salir, tecla F, barra espaciadora para disparar y M para el zoom del mapa. Para grabar con sonido, activa el micrófono antes de empezar. Encontrarás tus tomas en Galería.</p></section></div>
+ </div>
+</dialog>
+<dialog id="takeDialog" aria-labelledby="takeTitle">
+ <div class="dialog-head"><h2 id="takeTitle">Tu toma</h2><button class="tool" data-close="takeDialog" type="button" aria-label="Cerrar toma"><svg class="ico"><use href="#i-close"/></svg></button></div>
+ <div id="takePreview"></div>
+ <p id="takeMeta"></p>
+ <div class="dialog-actions"><button id="deleteTake" class="tool" type="button" aria-label="Eliminar toma" title="Eliminar toma"><svg class="ico"><use href="#i-trash"/></svg></button><a id="downloadTake" class="secondary"><svg class="ico"><use href="#i-download"/></svg>Descargar</a><button id="shareTake" type="button" class="primary" hidden><svg class="ico"><use href="#i-share"/></svg>Compartir</button></div>
+</dialog>
+<div class="toast" role="status" id="toast" hidden></div>
+</body>
+</html>
