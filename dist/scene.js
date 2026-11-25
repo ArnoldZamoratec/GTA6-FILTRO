@@ -51,7 +51,8 @@ export class Scene {
     this.walker = new Walker((pace,time) => radar.city.setMotion(pace,time), state => radar.trackingState(state));
     this.mapButton = document.getElementById('mapZoom');
     this.safe = { top:0, left:0, bottom:0, right:0 };
-    this.maxEdge = 3840;
+    // Tamaño de trabajo en vivo: 1080p, baja a 720p si el equipo no da abasto.
+    this.liveEdge = 1920; this.maxEdge = this.liveEdge; this.cost = 0; this.slow = 0;
     this.live = false;
     this.mirrored = false;
     this.locked = false;
@@ -83,7 +84,7 @@ export class Scene {
       const sourceH = this.live ? this.video.videoHeight : this.demo.naturalHeight || 941;
       if (sourceW && sourceH) {
         // Nunca por debajo de la nitidez de la pantalla, nunca por encima de la cámara.
-        const dpr = Math.min(3, window.devicePixelRatio || 1);
+        const dpr = Math.min(2, window.devicePixelRatio || 1);
         const frame = nativeFrame(width, height, Math.max(sourceW, width * dpr), Math.max(sourceH, height * dpr), this.maxEdge);
         if (frame.width !== this.canvas.width || frame.height !== this.canvas.height) {
           this.canvas.width = frame.width; this.canvas.height = frame.height;
@@ -149,6 +150,17 @@ export class Scene {
     }
   }
   draw() {
+    const begin = performance.now();
+    this.render();
+    if (!this.live || this.locked) return;
+    // Rendimiento adaptativo: si cada fotograma tarda demasiado, se reduce la resolución de trabajo.
+    const spent = performance.now() - begin;
+    this.cost = this.cost ? this.cost * .9 + spent * .1 : spent;
+    if (this.cost > 20 && this.liveEdge > 1280 && ++this.slow > 45) {
+      this.liveEdge = 1280; this.maxEdge = 1280; this.slow = 0; this.cost = 0; this.resize();
+    } else if (this.cost <= 20) this.slow = 0;
+  }
+  render() {
     const { canvas, ctx } = this;
     const w = canvas.width, h = canvas.height;
     this.dirty = false;

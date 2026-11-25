@@ -5,8 +5,23 @@
   "installCommand": "",
   "outputDirectory": "dist",
   "headers": [
-    { "source": "/(.*)", "headers": [
-      { "key": "Permissions-Policy", "value": "camera=(self), microphone=(self), geolocation=(self)" }
-    ] }
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(self), microphone=(self), geolocation=(self)"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800, stale-while-revalidate=86400"
+        }
+      ]
+    }
   ]
 }

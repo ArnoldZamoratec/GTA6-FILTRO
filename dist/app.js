@@ -202,17 +202,7 @@ async function tuneTrack(track) {
   const advanced = {};
   for (const key of ['focusMode', 'exposureMode', 'whiteBalanceMode']) if (caps[key]?.includes?.('continuous')) advanced[key] = 'continuous';
   try { if (Object.keys(advanced).length) await track.applyConstraints({ advanced: [advanced] }); } catch { /* Opcional. */ }
-  // Si la cámara admite más resolución de la que entregó, se pide la máxima (hasta 4K).
-  const current = track.getSettings?.() || {};
-  const maxW = caps.width?.max, maxH = caps.height?.max;
-  if (maxW && maxH && current.width && current.height) {
-    const portrait = current.height > current.width;
-    const long = Math.min(3840, Math.max(maxW, maxH)), short = Math.min(2160, Math.min(maxW, maxH));
-    const wantW = portrait ? short : long, wantH = portrait ? long : short;
-    if (wantW * wantH > current.width * current.height * 1.05) {
-      try { await track.applyConstraints({ width: { ideal: wantW }, height: { ideal: wantH }, frameRate: { ideal: 30 } }); } catch { /* Se mantiene la resolución actual. */ }
-    }
-  }
+  // La vista en vivo se queda en 1080p para ir fluida; las fotos usan el sensor completo aparte.
 }
 let wakeLock = null;
 async function keepAwake(on) {
@@ -254,8 +244,8 @@ async function startCamera(requested = facing, silent = false) {
     const portrait = window.matchMedia('(orientation: portrait)').matches;
     const opening = navigator.mediaDevices.getUserMedia({
       video: {
-        facingMode: { ideal: requested }, width: { ideal: portrait ? 2160 : 3840 },
-        height: { ideal: portrait ? 3840 : 2160 }, frameRate: { ideal: 30 }, resizeMode: { ideal: 'none' }
+        facingMode: { ideal: requested }, width: { ideal: portrait ? 1080 : 1920 },
+        height: { ideal: portrait ? 1920 : 1080 }, frameRate: { ideal: 30 }, resizeMode: { ideal: 'none' }
       }, audio: false
     });
     if (expandOnStart) setImmersive(true, true);
@@ -483,10 +473,10 @@ function beginRecording(canReduce = true) {
     throw new Error('No se encontró un codificador');
   } catch (error) {
     stopTracks(feed);
-    if (canReduce && Math.max(canvas.width,canvas.height) > 1920) {
-      scene.maxEdge = 1920;
+    if (canReduce && Math.max(canvas.width,canvas.height) > 1280) {
+      scene.maxEdge = 1280;
       try { return beginRecording(false); }
-      finally { if (!recording) { scene.maxEdge = 3840; scene.resize(); } }
+      finally { if (!recording) { scene.maxEdge = scene.liveEdge; scene.resize(); } }
     }
     throw error;
   }
@@ -504,7 +494,7 @@ async function finishRecording(take) {
   take.finishing = true; take.stopping = true;
   const duration = Math.max(0, (take.ended || performance.now()) - take.started);
   stopTracks(take.feed);
-  scene.locked = false; scene.maxEdge = 3840; scene.resize();
+  scene.locked = false; scene.maxEdge = scene.liveEdge; scene.resize();
   try {
     if (!take.chunks.length) throw new Error('Video vacío');
     const mime = take.chunks.find(chunk => chunk.type)?.type || take.recorder.mimeType || 'video/webm';
